@@ -20,10 +20,11 @@ def plot_learning_curve(loss_record, title=''):
 	plt.plot(x_2, loss_record['dev'], c='tab:cyan', label='dev')
 	plt.ylim(0.0, 5.)
 	plt.xlabel('Training steps')
-	plt.ylabel('MSE loss')
+	plt.ylabel('RMSE loss')
 	plt.title('Learning curve of {}'.format(title))
 	plt.legend()
-	plt.show()
+	plt.savefig('fig/RMSE_loss.png')
+	#plt.show()
 
 def plot_pred(dv_set, model, device, lim=35., preds=None, targets=None):
 	''' Plot prediction of your DNN '''
@@ -47,4 +48,5 @@ def plot_pred(dv_set, model, device, lim=35., preds=None, targets=None):
 	plt.xlabel('ground truth value')
 	plt.ylabel('predicted value')
 	plt.title('Ground Truth v.s. Prediction')
-	plt.show()
+	plt.savefig('fig/RMSE_test.png')
+	#plt.show()

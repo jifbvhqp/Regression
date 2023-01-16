@@ -41,7 +41,7 @@ class COVID19Dataset(Dataset):
 			feats = list(range(93))
 		else:
 			# TODO: Using 40 states & 2 tested_positive features (indices = 57 & 75)
-			pass
+			feats = list(range(40)) + list(range(40,44)) + [57] + list(range(58,62)) + [75] + list(range(76,68))
 
 		if mode == 'test':
 			# Testing data

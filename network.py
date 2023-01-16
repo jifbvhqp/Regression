@@ -31,4 +31,4 @@ class NeuralNet(nn.Module):
 	def cal_loss(self, pred, target):
 		''' Calculate loss '''
 		# TODO: you may implement L1/L2 regularization here
-		return self.criterion(pred, target)
+		return torch.sqrt(self.criterion(pred, target))
