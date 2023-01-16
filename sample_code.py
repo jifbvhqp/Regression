@@ -14,19 +14,14 @@ Objectives:
 * Get familiar with PyTorch.
 
 # **Download Data**
-
-
 If the Google drive links are dead, you can download data from [kaggle](https://www.kaggle.com/c/ml2021spring-hw1/data), and upload data manually to the workspace.
 """
-
 tr_path = 'covid.train.csv'	 # path to training data
 tt_path = 'covid.test.csv'	 # path to testing data
 
 #!gdown --id '19CCyCgJrUxtvgZF53vnctJiOJ23T5mqF' --output covid.train.csv
 #!gdown --id '1CE240jLm2npU-tdz81-oVKEF3T2yfT1O' --output covid.test.csv
-
 """# **Import Some Packages**"""
-
 # PyTorch
 import torch
 import torch.nn as nn
@@ -53,7 +48,6 @@ if torch.cuda.is_available():
 
 You do not need to modify this part.
 """
-
 def get_device():
 	''' Get device (if GPU is available, use GPU) '''
 	return 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -72,7 +66,6 @@ def plot_learning_curve(loss_record, title=''):
 	plt.title('Learning curve of {}'.format(title))
 	plt.legend()
 	plt.show()
-
 
 def plot_pred(dv_set, model, device, lim=35., preds=None, targets=None):
 	''' Plot prediction of your DNN '''
@@ -126,7 +119,7 @@ class COVID19Dataset(Dataset):
 		with open(path, 'r') as fp:
 			data = list(csv.reader(fp))
 			data = np.array(data[1:])[:, 1:].astype(float)
-		
+
 		if not target_only:
 			feats = list(range(93))
 		else:
@@ -158,9 +151,8 @@ class COVID19Dataset(Dataset):
 		self.data[:, 40:] = \
 			(self.data[:, 40:] - self.data[:, 40:].mean(dim=0, keepdim=True)) \
 			/ self.data[:, 40:].std(dim=0, keepdim=True)
-
+		
 		self.dim = self.data.shape[1]
-
 		print('Finished reading the {} set of COVID19 Dataset ({} samples found, each dim = {})'
 			  .format(mode, len(self.data), self.dim))
 
@@ -178,11 +170,8 @@ class COVID19Dataset(Dataset):
 		return len(self.data)
 
 """## **DataLoader**
-
 A `DataLoader` loads data from a given `Dataset` into batches.
-
 """
-
 def prep_dataloader(path, mode, batch_size, n_jobs=0, target_only=False):
 	''' Generates a dataset, then is put into a dataloader. '''
 	dataset = COVID19Dataset(path, mode=mode, target_only=target_only)	# Construct dataset
@@ -193,11 +182,9 @@ def prep_dataloader(path, mode, batch_size, n_jobs=0, target_only=False):
 	return dataloader
 
 """# **Deep Neural Network**
-
 `NeuralNet` is an `nn.Module` designed for regression.
 The DNN consists of 2 fully-connected layers with ReLU activation.
 This module also included a function `cal_loss` for calculating loss.
-
 """
 class NeuralNet(nn.Module):
 	''' A simple fully-connected deep neural network '''
@@ -230,9 +217,7 @@ class NeuralNet(nn.Module):
 """
 def train(tr_set, dv_set, model, config, device):
 	''' DNN training '''
-
 	n_epochs = config['n_epochs']  # Maximum number of epochs
-
 	# Setup optimizer
 	optimizer = getattr(torch.optim, config['optimizer'])(
 		model.parameters(), **config['optim_hparas'])
@@ -303,7 +288,6 @@ def test(tt_set, model, device):
 
 `config` contains hyper-parameters for training and the path to save your model.
 """
-
 device = get_device()				  # get the current available device ('cpu' or 'cuda')
 print(device)
 os.makedirs('models', exist_ok=True)  # The trained model will be saved to ./models/
@@ -328,7 +312,6 @@ dv_set = prep_dataloader(tr_path, 'dev', config['batch_size'], target_only=targe
 tt_set = prep_dataloader(tt_path, 'test', config['batch_size'], target_only=target_only)
 
 model = NeuralNet(tr_set.dataset.dim).to(device)  # Construct model and move to device
-
 """# **Start Training!**"""
 model_loss, model_loss_record = train(tr_set, dv_set, model, config, device)
 plot_learning_curve(model_loss_record, title='deep model')
@@ -343,7 +326,7 @@ plot_pred(dv_set, model, device)  # Show prediction on the validation set
 The predictions of your model on testing set will be stored at `pred.csv`.
 """
 def save_pred(preds, file):
-	''' Save predictions to specified file '''
+	###Save predictions to specified file###
 	print('Saving results to {}'.format(file))
 	with open(file, 'w') as fp:
 		writer = csv.writer(fp)
@@ -355,7 +338,6 @@ preds = test(tt_set, model, device)	 # predict COVID-19 cases with your model
 save_pred(preds, 'pred.csv')		 # save prediction file to pred.csv
 
 """# **Hints**
-
 ## **Simple Baseline**
 * Run sample code
 
